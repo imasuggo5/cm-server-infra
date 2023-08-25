@@ -1,0 +1,25 @@
+---
+- name: Update packages
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - gnupg
+      - software-properties-common
+
+- name: Add GPG key
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    keyring: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+- name: Add repository
+  ansible.builtin.apt_repository:
+    repo: deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com focal main
+    filename: hashicorp.list
+
+- name: Install Terraform
+  ansible.builtin.apt:
+    name:
+      - terraform
